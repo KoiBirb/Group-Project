@@ -1,10 +1,24 @@
+/*
+ * Checking.java
+ * Leo Bogaert
+ * April 24, 2025,
+ * Creates a checking account with an overdraft limit.
+ */
+
 public class Checking extends Account{
 
     private double overdraftLimit;
 
-    public Checking(String name, int initialBalance, double overdraftLimit) {
+    /**
+     * Constructor for the Checking class.
+     * @param name The name of the account holder.
+     * @param initialBalance The initial balance of the account.
+     * @param overdraftLimit The overdraft limit for the account.
+     */
+    public Checking(String name, double initialBalance, double overdraftLimit) {
         super(name, initialBalance);
 
+        // ensure overdraft limit is not negative
         if (overdraftLimit < 0) {
             overdraftLimit = 0;
             System.out.println("Overdraft limit cannot be negative. Setting to 0.");
@@ -13,6 +27,11 @@ public class Checking extends Account{
         this.overdraftLimit = overdraftLimit;
     }
 
+    /**
+     * Withdraws money from the account.
+     * @param amount The amount to withdraw.
+     * @return true if the withdrawal was successful, false otherwise.
+     */
     @Override
     public boolean withdraw(int amount) {
         if (amount <= 0) {
@@ -27,6 +46,11 @@ public class Checking extends Account{
         }
     }
 
+    /**
+     * Deposits money into the account.
+     * @param amount The amount to deposit.
+     * @return true if the deposit was successful, false otherwise.
+     */
     @Override
     public boolean deposit(int amount) {
         if (amount > 0) {
@@ -38,15 +62,28 @@ public class Checking extends Account{
         }
     }
 
+    /**
+     * Prints out account information.
+     * @return A string containing account information.
+     */
     @Override
     public String toString() {
         return super.toString() + "\nOverdraft Limit: " + overdraftLimit;
     }
 
+    /**
+     * Gets the overdraft limit.
+     * @return The overdraft limit.
+     */
     public double getOverdraftLimit() {
         return overdraftLimit;
     }
 
+    /**
+     * Sets the overdraft limit.
+     * @param overdraftLimit The new overdraft limit.
+     * @return true if the overdraft limit was set successfully, false otherwise.
+     */
     public boolean setOverdraftLimit(double overdraftLimit) {
         if (overdraftLimit < 0) {
             System.out.println("Overdraft limit cannot be negative.");
