@@ -33,7 +33,7 @@ public class Checking extends Account{
      * @return true if the withdrawal was successful, false otherwise.
      */
     @Override
-    public boolean withdraw(int amount) {
+    public boolean withdraw(double amount) {
         if (amount <= 0) {
             System.out.println("Withdrawal amount must be positive.");
             return false;
@@ -52,7 +52,7 @@ public class Checking extends Account{
      * @return true if the deposit was successful, false otherwise.
      */
     @Override
-    public boolean deposit(int amount) {
+    public boolean deposit(double amount) {
         if (amount > 0) {
             setBalance(getBalance() + amount);
             return true;

@@ -31,14 +31,14 @@ public abstract class Account {
      * @param amount The amount to withdraw.
      * @return true if the withdrawal was successful, false otherwise.
      */
-    public abstract boolean withdraw(int amount);
+    public abstract boolean withdraw(double amount);
 
     /**
      * Abstract method to deposit money into the account.
      * @param amount The amount to deposit.
      * @return true if the deposit was successful, false otherwise.
      */
-    public abstract boolean deposit(int amount);
+    public abstract boolean deposit(double amount);
 
     /**
      * Method to print out account information.

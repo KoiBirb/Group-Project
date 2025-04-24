@@ -17,7 +17,7 @@ public class Savings extends Account{
     public Savings(String name, double initialBalance, double interestRate) {
         super(name, initialBalance);
 
-        // insure interest rate is not negative
+        // ensure interest rate is not negative
         if (interestRate < 0) {
             interestRate = 0;
             System.out.println("Interest Rate cannot be negative. Setting to 0.");
@@ -32,7 +32,7 @@ public class Savings extends Account{
      * @return true if the withdrawal was successful, false otherwise.
      */
     @Override
-    public boolean withdraw(int amount) {
+    public boolean withdraw(double amount) {
         if (amount <= 0) {
             System.out.println("Withdrawal amount must be positive.");
             return false;
@@ -51,7 +51,7 @@ public class Savings extends Account{
      * @return true if the deposit was successful, false otherwise.
      */
     @Override
-    public boolean deposit(int amount) {
+    public boolean deposit(double amount) {
         if (amount > 0) {
             setBalance(getBalance() + amount);
             setBalance(calculateInterest());
