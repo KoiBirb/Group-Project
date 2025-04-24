@@ -4,7 +4,7 @@ public abstract class Account {
 
     private String name;
     private final int accountNumber;
-    private int balance;
+    private double balance;
 
     private final Random rand = new Random();
 
@@ -14,17 +14,17 @@ public abstract class Account {
         accountNumber = rand.nextInt(9000) + 1000;
     }
 
-    public Account (String name){
-        this.name = name;
-        this.balance = 0;
-        accountNumber = rand.nextInt(9000) + 1000;
-    }
-
     public abstract boolean withdraw(int amount);
 
-    public abstract boolean deposit(int amount);
+    public abstract void deposit(int amount);
 
-    public abstract String toString();
+    public String toString() {
+        return "Account Information:\n" +
+                "Account Holder: " + name + "\n" +
+                "Account Number: " + accountNumber + "\n" +
+                "Account Type: " + this.getClass().getSimpleName() + "\n" +
+                "Account Balance: " + balance;
+    };
 
     public String getName() {
         return name;
@@ -38,7 +38,7 @@ public abstract class Account {
         return accountNumber;
     }
 
-    public int getBalance() {
+    public double getBalance() {
         return balance;
     }
 
