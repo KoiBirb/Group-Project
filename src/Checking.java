@@ -15,7 +15,10 @@ public class Checking extends Account{
 
     @Override
     public boolean withdraw(int amount) {
-        if (amount > 0 && amount <= getBalance() + overdraftLimit) {
+        if (amount <= 0) {
+            System.out.println("Withdrawal amount must be positive.");
+            return false;
+        } else if (amount <= getBalance() + overdraftLimit) {
             setBalance(getBalance() - amount);
             return true;
         } else {
