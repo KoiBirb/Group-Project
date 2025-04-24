@@ -16,7 +16,7 @@ public abstract class Account {
 
     public abstract boolean withdraw(int amount);
 
-    public abstract void deposit(int amount);
+    public abstract boolean deposit(int amount);
 
     public String toString() {
         return "Account Information:\n" +
@@ -40,6 +40,10 @@ public abstract class Account {
 
     public double getBalance() {
         return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
     }
 
 }
