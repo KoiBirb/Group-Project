@@ -15,7 +15,7 @@ public class Checking extends Account{
      * @param initialBalance The initial balance of the account.
      * @param overdraftLimit The overdraft limit for the account.
      */
-    public Checking(String name, int initialBalance, double overdraftLimit) {
+    public Checking(String name, double initialBalance, double overdraftLimit) {
         super(name, initialBalance);
 
         // ensure overdraft limit is not negative

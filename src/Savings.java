@@ -14,7 +14,7 @@ public class Savings extends Account{
      * @param initialBalance The initial balance of the account.
      * @param interestRate The interest rate for the account.
      */
-    public Savings(String name, int initialBalance, double interestRate) {
+    public Savings(String name, double initialBalance, double interestRate) {
         super(name, initialBalance);
 
         // insure interest rate is not negative

@@ -20,7 +20,7 @@ public abstract class Account {
      * @param name The name of the account holder.
      * @param initialBalance The initial balance of the account.
      */
-    public Account (String name, int initialBalance){
+    public Account (String name, double initialBalance){
         this.name = name;
         this.balance = initialBalance;
         accountNumber = rand.nextInt(9000) + 1000;
