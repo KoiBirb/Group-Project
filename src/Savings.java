@@ -1,10 +1,23 @@
+/*
+ * Savings.java
+ * Leo Bogaert
+ * April 24, 2025,
+ * This class creates a savings account with an interest rate.
+ */
 public class Savings extends Account{
 
     private double interestRate;
 
+    /**
+     * Constructor for the Savings class.
+     * @param name The name of the account holder.
+     * @param initialBalance The initial balance of the account.
+     * @param interestRate The interest rate for the account.
+     */
     public Savings(String name, int initialBalance, double interestRate) {
         super(name, initialBalance);
 
+        // insure interest rate is not negative
         if (interestRate < 0) {
             interestRate = 0;
             System.out.println("Interest Rate cannot be negative. Setting to 0.");
@@ -13,6 +26,11 @@ public class Savings extends Account{
         this.interestRate = interestRate;
     }
 
+    /**
+     * Withdraws money from the account.
+     * @param amount The amount to withdraw.
+     * @return true if the withdrawal was successful, false otherwise.
+     */
     @Override
     public boolean withdraw(int amount) {
         if (amount <= 0) {
@@ -27,12 +45,15 @@ public class Savings extends Account{
         }
     }
 
+    /**
+     * Deposits money into the account, adds interest on successful deposit.
+     * @param amount The amount to deposit.
+     * @return true if the deposit was successful, false otherwise.
+     */
     @Override
     public boolean deposit(int amount) {
         if (amount > 0) {
             setBalance(getBalance() + amount);
-
-            // Add interest to the balance
             setBalance(calculateInterest());
             return true;
         } else {
@@ -41,19 +62,36 @@ public class Savings extends Account{
         }
     }
 
+    /**
+     * Prints out account information including interest rate.
+     * @return A string representation of the account information.
+     */
     @Override
     public String toString() {
         return super.toString() + "\nInterest Rate: " + interestRate;
     }
 
+    /**
+     * Calculates the interest based on the current balance and interest rate.
+     * @return The updated balance including calculated interest.
+     */
     private double calculateInterest() {
         return getBalance() * (1+ Math.pow((interestRate/12),12));
     }
 
+    /**
+     * Gets the interest rate.
+     * @return The interest rate.
+     */
     public double getInterestRate() {
         return interestRate;
     }
 
+    /**
+     * Sets the interest rate.
+     * @param interestRate The new interest rate.
+     * @return true if the interest rate was set successfully, false otherwise.
+     */
     public boolean setInterestRate(double interestRate) {
         if (interestRate < 0) {
             System.out.println("Interest Rate cannot be negative.");
