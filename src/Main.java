@@ -144,7 +144,8 @@ public class Main {
                 case "S": // show account details
 
                     Account account = null;
-                    int accountNumber = 0;
+                    int accountNumber = 99999;
+
                     do {
                         System.out.print("Account number: ");
 
