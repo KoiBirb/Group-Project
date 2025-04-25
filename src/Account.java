@@ -51,6 +51,16 @@ public abstract class Account {
     };
 
     /**
+     * Overloaded method to print out account information without showing full account number
+     */
+    public String toStringHidden() {
+        return   "Account Holder: " + name + "\n" +
+                 "Account Number: " + ((String.valueOf(accountNumber).split(""))[0]) + "***" + "\n" +
+                 "Account Type: " + this.getClass().getSimpleName() + "\n" +
+                 "Account Balance: $" + String.format("%.2f", balance);
+     };
+
+    /**
      * Gets the account name.
      * @return The account name.
      */

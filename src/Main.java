@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -10,7 +11,7 @@ public class Main {
     public static void main(String[] args) {
         String choice;
 
-        initializeBank(accounts);
+        initializeBank();
         System.out.println("Welcome to London Central Bank, a small, credit union style bank in downtown London, ON.");
 
         while (true) {
@@ -120,10 +121,11 @@ public class Main {
 
                         createCheckingAccount(name, balance, overdraft);
                     }
+                    input.nextLine();
                     break;
 
                 case "S":
-                    System.out.println(getAccount());
+                    showAccountDetails();
                     break;
 
                 case "D":
@@ -175,31 +177,38 @@ public class Main {
                 default:
                     System.out.println("Invalid choice. Please try again.");
             }
-            input.nextLine();
+            if (! choice.equals("S")) input.nextLine();
+            System.out.println();
         }
     }
 
     /**
      * Initializes the bank by adding 3 required accounts
-     * @param someAccounts  The hashmap that will store the accounts
      */
-    public static void initializeBank(HashMap<Integer, Account> someAccounts) {
+    public static void initializeBank() {
 
         Account holder;
 
         // Put the accounts in hashmap
         holder = new Checking("Diego Martin", 668.57, 100.00);
-        someAccounts.put(holder.getAccountNumber(), holder);
-        System.out.println(holder.getAccountNumber());
+        accounts.put(holder.getAccountNumber(), holder);
+        System.out.println(holder.getName() + ": " + holder.getAccountNumber());
         holder = new Savings("Janice Watt", 120.00, 1.9);
-        someAccounts.put(holder.getAccountNumber(), holder);
+        accounts.put(holder.getAccountNumber(), holder);
+        System.out.println(holder.getName() + ": " + holder.getAccountNumber());
         holder = new Checking("Michael Rose", 37.65, 0.0);
-        someAccounts.put(holder.getAccountNumber(), holder);
+        accounts.put(holder.getAccountNumber(), holder);
+        System.out.println(holder.getName() + ": " + holder.getAccountNumber());
+        System.out.println("---------------------------------------");
+        System.out.println();
         
     }
 
     /**
      * Creates a Savings account
+     * @param name  The name for the account
+     * @param initial   The initial balance of the account
+     * @param interest The interest rate of the account
      */
     public static void createSavingsAccount(String name, double initial, double interest) {
         Account holder;
@@ -211,6 +220,9 @@ public class Main {
 
     /**
      * Creates a Checking account
+     * @param name  The name for the account
+     * @param initial   The initial balance of the account
+     * @param overdraft The overdraft limit of the account
      */
     public static void createCheckingAccount(String name, double initial, double overdraft) {
         Account holder;
@@ -243,5 +255,47 @@ public class Main {
         } while (account == null);
 
         return account;
+    }
+
+    /**
+     * Finds account using a name
+     * @param name  The name to look for in the hashmap of accounts
+     * @return An arraylist of all the accounts that match the specified name
+     */
+    public static ArrayList<Account> findAccounts(String name) {
+        ArrayList<Account> matchingAccounts = new ArrayList<Account>();
+
+        // Add all the accounts that have the name
+        for (Account acc: accounts.values()) {
+            if ((acc.getName()).equals(name)) matchingAccounts.add(acc);
+        }
+
+        return matchingAccounts;
+    }
+
+    /**
+     * Shows account using account name or account number
+     */
+    public static void showAccountDetails() {
+        String nameOrNumber;
+        int accountNumber;
+        System.out.print("Account number or name (First then Last): ");
+        nameOrNumber = input.nextLine().trim();
+        System.out.println();
+        try {
+            // See if the input was a number
+            accountNumber = Integer.valueOf(nameOrNumber);
+            // Use account number to find and display info.
+            System.out.println(accounts.get(accountNumber));
+        } catch (Exception e) { // treat the input like a name
+            ArrayList<Account> showAccounts = findAccounts(nameOrNumber);
+            System.out.println("There are " + showAccounts.size() + " account(s) with the name " + nameOrNumber);
+
+            // Display all the account info
+            for (Account acc: showAccounts) {
+                System.out.println();
+                System.out.println(acc.toStringHidden());
+            }
+        }
     }
 }
