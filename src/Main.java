@@ -255,11 +255,13 @@ public class Main {
                 int accountNumber = input.nextInt();
                 account = accounts.get(accountNumber);
             } catch (InputMismatchException e) {
-                System.out.println("Invalid number. Please try again.");
+                System.out.print("Invalid number, ");
             }
 
-            if (account == null)
+            if (account == null) {
                 System.out.println("Account not found. Please try again.");
+                input.nextLine();
+            }
 
         } while (account == null);
 
