@@ -129,7 +129,7 @@ public class Main {
                                 overdraft = input.nextDouble();
                                 validChoice = overdraft >= 0;
                             } catch (InputMismatchException e) {
-                                System.out.println("Invalid overdraft limit. Please try again.");
+                                validChoice = false;
                                 input.nextLine();
                             }
 
