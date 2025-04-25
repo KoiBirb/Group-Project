@@ -1,28 +1,27 @@
-/*
- * Account.java
+package Accounts;/*
+ * Accounts.Account.java
  * Leo Bogaert
  * April 24, 2025,
- * Abstract class for accounts, serves as a template for the Checking and Savings classes.
+ * Abstract class for accounts, serves as a template for the Accounts.Checking and Accounts.Savings classes.
  */
 
 import java.util.Random;
 
 public abstract class Account {
 
-    private String name;
-    private final int accountNumber;
-    private double balance;
-
-    private final Random rand = new Random();
+    protected String name;
+    protected final int accountNumber;
+    protected double balance;
 
     /**
-     * Constructor for the Account class.
+     * Constructor for the Accounts.Account class.
      * @param name The name of the account holder.
      * @param initialBalance The initial balance of the account.
      */
     public Account (String name, double initialBalance){
         this.name = name;
         this.balance = initialBalance;
+        Random rand = new Random();
         accountNumber = rand.nextInt(9000) + 1000;
     }
 
@@ -44,10 +43,10 @@ public abstract class Account {
      * Method to print out account information.
      */
     public String toString() {
-       return   "Account Holder: " + name + "\n" +
-                "Account Number: " + accountNumber + "\n" +
-                "Account Type: " + this.getClass().getSimpleName() + "\n" +
-                "Account Balance: $" + String.format("%.2f", balance);
+       return   "Accounts.Account Holder: " + name + "\n" +
+                "Accounts.Account Number: " + accountNumber + "\n" +
+                "Accounts.Account Type: " + this.getClass().getSimpleName() + "\n" +
+                "Accounts.Account Balance: $" + String.format("%.2f", balance);
     };
 
     /**
@@ -81,13 +80,4 @@ public abstract class Account {
     public double getBalance() {
         return balance;
     }
-
-    /**
-     * Sets the account balance.
-     * @param balance The new balance of the account.
-     */
-    public void setBalance(double balance) {
-        this.balance = balance;
-    }
-
 }

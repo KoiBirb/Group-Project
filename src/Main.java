@@ -1,3 +1,7 @@
+import Accounts.Account;
+import Accounts.Checking;
+import Accounts.Savings;
+
 import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -41,7 +45,7 @@ public class Main {
                     double balance = 0;
 
                     do {
-                        System.out.print("Type of Account ([S]avings or [C]hecking): ");
+                        System.out.print("Type of Accounts.Account ([S]avings or [C]hecking): ");
                         choice = input.nextLine().trim().toUpperCase();
 
                         validChoice = choice.equals("S") || choice.equals("C");
@@ -52,7 +56,7 @@ public class Main {
                     } while (!validChoice);
 
                     do {
-                        System.out.print("Account Holder Name (First Last): ");
+                        System.out.print("Accounts.Account Holder Name (First Last): ");
                         name = input.nextLine().trim();
 
                         validChoice = !name.isEmpty();
@@ -79,14 +83,14 @@ public class Main {
 
                     if (choice.equals("S")) {
 
-                        double intrestRate = 0;
+                        double interestRate = 0;
 
                         do {
                             System.out.print("Interest Rate (%): ");
 
                             try {
-                                intrestRate = input.nextDouble();
-                                validChoice = intrestRate >= 0;
+                                interestRate = input.nextDouble();
+                                validChoice = interestRate >= 0;
                             } catch (InputMismatchException e) {
                                 System.out.println("Invalid interest rate. Please try again.");
                                 input.nextLine();
@@ -97,7 +101,7 @@ public class Main {
 
                         } while (!validChoice);
 
-                        createSavingsAccount(name, balance, intrestRate);
+                        createSavingsAccount(name, balance, interestRate);
 
                     } else {
 
@@ -153,7 +157,7 @@ public class Main {
                     break;
 
                 case "W":
-                    double withdrawl = 0;
+                    double withdrawal;
 
                     System.out.print("What account would you like to use? ");
                     Account withdrawlAccount = getAccount();
@@ -162,8 +166,8 @@ public class Main {
                         System.out.print("How much would you like to withdraw: ");
 
                         try {
-                            withdrawl = input.nextDouble();
-                            validChoice = withdrawlAccount.withdraw(withdrawl);
+                            withdrawal = input.nextDouble();
+                            validChoice = withdrawlAccount.withdraw(withdrawal);
                         } catch (InputMismatchException e) {
                             System.out.println("Invalid number. Please try again.");
                             input.nextLine();
@@ -199,25 +203,25 @@ public class Main {
     }
 
     /**
-     * Creates a Savings account
+     * Creates an Accounts.Savings account
      */
     public static void createSavingsAccount(String name, double initial, double interest) {
         Account holder;
         holder = new Savings(name, initial, interest);
         accounts.put(holder.getAccountNumber(), holder);
 
-        System.out.println("Account Created! Account number: " + holder.getAccountNumber());
+        System.out.println("Accounts.Account Created! Accounts.Account number: " + holder.getAccountNumber());
     }
 
     /**
-     * Creates a Checking account
+     * Creates an Accounts.Checking account
      */
     public static void createCheckingAccount(String name, double initial, double overdraft) {
         Account holder;
         holder = new Checking(name, initial, overdraft);
         accounts.put(holder.getAccountNumber(), holder);
 
-        System.out.println("Account Created! Account number: " + holder.getAccountNumber());
+        System.out.println("Accounts.Account Created! Accounts.Account number: " + holder.getAccountNumber());
     }
 
     /**
@@ -228,7 +232,7 @@ public class Main {
         Account account = null;
 
         do {
-            System.out.print("Account number: ");
+            System.out.print("Accounts.Account number: ");
 
             try {
                 int accountNumber = input.nextInt();
@@ -238,7 +242,7 @@ public class Main {
             }
 
             if (account == null)
-                System.out.println("Account not found. Please try again.");
+                System.out.println("Accounts.Account not found. Please try again.");
 
         } while (account == null);
 

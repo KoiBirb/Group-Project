@@ -1,15 +1,17 @@
+package Accounts;
+
 /*
- * Savings.java
+ * Accounts.Savings.java
  * Leo Bogaert
  * April 24, 2025,
  * This class creates a savings account with an interest rate.
  */
-public class Savings extends Account{
+public class Savings extends Account {
 
     private double interestRate;
 
     /**
-     * Constructor for the Savings class.
+     * Constructor for the Accounts.Savings class.
      * @param name The name of the account holder.
      * @param initialBalance The initial balance of the account.
      * @param interestRate The interest rate for the account.
@@ -36,8 +38,8 @@ public class Savings extends Account{
         if (amount <= 0) {
             System.out.println("Withdrawal amount must be positive.");
             return false;
-        } else if (amount <= getBalance()) {
-            setBalance(getBalance() - amount);
+        } else if (amount <= balance) {
+            balance -= amount;
             return true;
         } else {
             System.out.println("Withdrawal amount exceeds balance.");
@@ -53,8 +55,8 @@ public class Savings extends Account{
     @Override
     public boolean deposit(double amount) {
         if (amount > 0) {
-            setBalance(getBalance() + amount);
-            setBalance(calculateInterest());
+            balance += amount;
+            balance += calculateInterest();
             return true;
         } else {
             System.out.println("Deposit amount must be positive.");
@@ -76,7 +78,7 @@ public class Savings extends Account{
      * @return The updated balance including calculated interest.
      */
     private double calculateInterest() {
-        return getBalance() * (1+ Math.pow(((interestRate/100)/12),12));
+        return balance * (1+ Math.pow(((interestRate/100)/12),12));
     }
 
     /**

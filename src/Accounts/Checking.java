@@ -1,16 +1,16 @@
-/*
- * Checking.java
+package Accounts;/*
+ * Accounts.Checking.java
  * Leo Bogaert
  * April 24, 2025,
  * Creates a checking account with an overdraft limit.
  */
 
-public class Checking extends Account{
+public class Checking extends Account {
 
     private double overdraftLimit;
 
     /**
-     * Constructor for the Checking class.
+     * Constructor for the Accounts.Checking class.
      * @param name The name of the account holder.
      * @param initialBalance The initial balance of the account.
      * @param overdraftLimit The overdraft limit for the account.
@@ -37,8 +37,8 @@ public class Checking extends Account{
         if (amount <= 0) {
             System.out.println("Withdrawal amount must be positive.");
             return false;
-        } else if (amount <= getBalance() + overdraftLimit) {
-            setBalance(getBalance() - amount);
+        } else if (amount <= balance + overdraftLimit) {
+            balance -= amount;
             return true;
         } else {
             System.out.println("Withdrawal amount exceeds balance and overdraft limit.");
@@ -54,7 +54,7 @@ public class Checking extends Account{
     @Override
     public boolean deposit(double amount) {
         if (amount > 0) {
-            setBalance(getBalance() + amount);
+            balance += amount;
             return true;
         } else {
             System.out.println("Deposit amount must be positive.");
