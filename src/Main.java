@@ -38,7 +38,7 @@ public class Main {
                 choice = input.nextLine().trim().toUpperCase();
 
                 validChoice = choice.equals("C") || choice.equals("S") || choice.equals("D") ||
-                        choice.equals("W") || choice.equals("Q");
+                        choice.equals("W") || choice.equals("Q") || choice.equals("R");
 
                 if (!validChoice)
                     System.out.println("Invalid choice. Please try again.");
@@ -142,7 +142,38 @@ public class Main {
                     break;
 
                 case "S": // show account details
-                    System.out.println(getAccount());
+
+                    Account account = null;
+                    int accountNumber = 0;
+                    do {
+                        System.out.print("Account number: ");
+
+                        try {
+                            accountNumber = input.nextInt();
+
+                            if (accountNumber == 0){
+                                for (Account a : accounts.values()) {
+                                    System.out.println(a);
+                                }
+
+                            } else {
+                                account = accounts.get(accountNumber);
+                            }
+                        } catch (InputMismatchException e) {
+                            System.out.print("Invalid number, ");
+                        }
+
+                        if (account == null && accountNumber != 0) {
+                            System.out.println("Account not found. Please try again.");
+                            input.nextLine();
+                        }
+
+                    } while (account == null && accountNumber != 0);
+                    
+                    if (accountNumber != 0)
+                        System.out.println(account);
+
+                    
                     break;
 
                 case "D": // deposit
@@ -210,7 +241,9 @@ public class Main {
 
                     if (removeAccount != null) {
 
-                        System.out.println("Are you sure you want to remove this account? (Y/N)");
+                        System.out.print("Are you sure you want to remove this account? (Y/N): ");
+
+                        input.nextLine();
 
                         String confirmation = input.nextLine().trim().toUpperCase();
 
@@ -219,7 +252,7 @@ public class Main {
                             break;
                         }
 
-                        System.out.println("Removing account: " + removeAccount.getAccountNumber() + " withdrew $" + removeAccount.getBalance());
+                        System.out.println("Removing account: " + removeAccount.getAccountNumber() + ", Withdrew $" + removeAccount.getBalance());
                         removeAccount.withdraw(removeAccount.getBalance());
 
                         accounts.remove(removeAccount.getAccountNumber());
@@ -231,7 +264,8 @@ public class Main {
                 default:
                     System.out.println("Invalid choice. Please try again.");
             }
-            input.nextLine(); // clear choices
+            if (!choice.equals("R"))
+                input.nextLine();
         }
     }
 
@@ -290,6 +324,7 @@ public class Main {
 
             try {
                 int accountNumber = input.nextInt();
+                
                 account = accounts.get(accountNumber);
             } catch (InputMismatchException e) {
                 System.out.print("Invalid number, ");
