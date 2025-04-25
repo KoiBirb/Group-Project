@@ -1,9 +1,11 @@
-package Accounts;/*
+/*
  * Accounts.Checking.java
  * Leo Bogaert
  * April 24, 2025,
  * Creates a checking account with an overdraft limit.
  */
+
+package Accounts;
 
 public class Checking extends Account {
 

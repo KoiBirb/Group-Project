@@ -1,11 +1,12 @@
-package Accounts;
-
 /*
  * Accounts.Savings.java
  * Leo Bogaert
  * April 24, 2025,
  * This class creates a savings account with an interest rate.
  */
+
+package Accounts;
+
 public class Savings extends Account {
 
     private double interestRate;

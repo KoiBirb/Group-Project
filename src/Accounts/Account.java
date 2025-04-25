@@ -1,9 +1,11 @@
-package Accounts;/*
+/*
  * Accounts.Account.java
  * Leo Bogaert
  * April 24, 2025,
  * Abstract class for accounts, serves as a template for the Accounts.Checking and Accounts.Savings classes.
  */
+
+package Accounts;
 
 import java.util.Random;
 

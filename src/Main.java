@@ -1,3 +1,14 @@
+/*
+ * Accounts.Savings.java
+ * Eleora Jacob
+ * April 25, 2025,
+ * Driver class for the bank program.
+ */
+
+import Accounts.Account;
+import Accounts.Checking;
+import Accounts.Savings;
+
 import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -7,6 +18,10 @@ public class Main {
     private static final Scanner input = new Scanner(System.in);
     private static final HashMap<Integer, Account> accounts = new HashMap<>();
 
+    /**
+     * Main method for the bank program.
+     * @param args Command line arguments
+     */
     public static void main(String[] args) {
         String choice;
 
@@ -16,6 +31,7 @@ public class Main {
         while (true) {
             boolean validChoice;
 
+            // Get user choice
             do {
                 System.out.println("[C]reate account, [S]how account details, [D]eposits, [W]ithdraw, [Q]uit?");
                 System.out.print("Choice: ");
@@ -30,13 +46,13 @@ public class Main {
             } while (!validChoice);
 
             switch (choice) {
-                case "Q":
+                case "Q": // quit
                     input.close();
                     System.out.println("Thanks for banking with us. We hope to see you again soon.");
                     System.exit(0);
                     break;
 
-                case "C":
+                case "C": // create account
                     String name;
                     double balance = 0;
 
@@ -79,14 +95,14 @@ public class Main {
 
                     if (choice.equals("S")) {
 
-                        double intrestRate = 0;
+                        double interestRate = 0;
 
                         do {
                             System.out.print("Interest Rate (%): ");
 
                             try {
-                                intrestRate = input.nextDouble();
-                                validChoice = intrestRate >= 0;
+                                interestRate = input.nextDouble();
+                                validChoice = interestRate >= 0;
                             } catch (InputMismatchException e) {
                                 System.out.println("Invalid interest rate. Please try again.");
                                 input.nextLine();
@@ -97,7 +113,7 @@ public class Main {
 
                         } while (!validChoice);
 
-                        createSavingsAccount(name, balance, intrestRate);
+                        createSavingsAccount(name, balance, interestRate);
 
                     } else {
 
@@ -122,11 +138,11 @@ public class Main {
                     }
                     break;
 
-                case "S":
+                case "S": // show account details
                     System.out.println(getAccount());
                     break;
 
-                case "D":
+                case "D": // deposit
                     double deposit = 0;
 
                     System.out.println("What account would you like to use? ");
@@ -152,8 +168,8 @@ public class Main {
                     System.out.println("Deposit successful. New balance: $" + String.format("%.2f", depositAccount.getBalance()));
                     break;
 
-                case "W":
-                    double withdrawl = 0;
+                case "W": // withdrawal
+                    double withdrawal;
 
                     System.out.print("What account would you like to use? ");
                     Account withdrawlAccount = getAccount();
@@ -162,8 +178,8 @@ public class Main {
                         System.out.print("How much would you like to withdraw: ");
 
                         try {
-                            withdrawl = input.nextDouble();
-                            validChoice = withdrawlAccount.withdraw(withdrawl);
+                            withdrawal = input.nextDouble();
+                            validChoice = withdrawlAccount.withdraw(withdrawal);
                         } catch (InputMismatchException e) {
                             System.out.println("Invalid number. Please try again.");
                             input.nextLine();
@@ -175,7 +191,7 @@ public class Main {
                 default:
                     System.out.println("Invalid choice. Please try again.");
             }
-            input.nextLine();
+            input.nextLine(); // clear choices
         }
     }
 
@@ -199,7 +215,7 @@ public class Main {
     }
 
     /**
-     * Creates a Savings account
+     * Creates a Savings account and adds it to the hashmap
      */
     public static void createSavingsAccount(String name, double initial, double interest) {
         Account holder;
@@ -210,7 +226,7 @@ public class Main {
     }
 
     /**
-     * Creates a Checking account
+     * Creates a Checking account and adds it to the hashmap
      */
     public static void createCheckingAccount(String name, double initial, double overdraft) {
         Account holder;
@@ -222,7 +238,7 @@ public class Main {
 
     /**
      * Gets an account from the user using an account number
-     * @return The account that was found
+     * @return The account found
      */
     public static Account getAccount () {
         Account account = null;
