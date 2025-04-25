@@ -27,6 +27,7 @@ public class Main {
 
         initializeBank(accounts);
         System.out.println("Welcome to London Central Bank, a small, credit union style bank in downtown London, ON.");
+        System.out.println("--------------------------------------------------------------------------------------------");
 
         while (true) {
             boolean validChoice = true;
@@ -76,6 +77,11 @@ public class Main {
 
                         try {
                             balance = input.nextDouble();
+                            // Don't allow user to deposit decimal cents
+                            if (isDecimalCents(balance)) {
+                                System.out.println("Balance must not have decimal cents.");
+                                continue;
+                            }
                             validChoice = balance > 0;
                         } catch (InputMismatchException e) {
                             input.nextLine();
@@ -177,7 +183,7 @@ public class Main {
                         try {
                             deposit = input.nextDouble();
                             // Check to make sure user is using WHOLE cents
-                            if (((String.valueOf(deposit)).replaceFirst(String.valueOf((int) Math.floor(deposit)), "")).length() > 2) {
+                            if (isDecimalCents(deposit)) {
                                 System.out.println("Deposit must not have decimal cents.");
                                 continue;
                             }
@@ -214,7 +220,7 @@ public class Main {
                         try {
                             withdrawal = input.nextDouble();
                             // Check to make sure user is using WHOLE cents
-                            if (((String.valueOf(withdrawal)).replaceFirst(String.valueOf((int) Math.floor(withdrawal)), "")).length() > 2) {
+                            if (isDecimalCents(withdrawal)) {
                                 System.out.println("Withdrawal must not have decimal cents.");
                                 continue;
                             }
@@ -329,5 +335,16 @@ public class Main {
         } while (account == null);
 
         return account;
+    }
+
+    /**
+     * Determines whether a double amount of money has decimal cents
+     * @param money The amount to be checked
+     * @return true if there is decimal cents, else false
+     */
+    public static Boolean isDecimalCents(double money) {
+        if (((String.valueOf(money)).replaceFirst(String.valueOf((int) Math.floor(money)), "")).length() > 3) {
+            return true;
+        } else return false;
     }
 }
