@@ -1,30 +1,25 @@
 import java.util.HashMap;
+import java.util.InputMismatchException;
 import java.util.Scanner;
-import java.util.ArrayList;
 
 public class Main {
 
-    public static void main(String[] args) {
-        HashMap<Integer, Account> accounts = new HashMap<>();
-        Scanner input = new Scanner(System.in);
-        String choice;
-        
-        // Start banking system
-        initializeBank(accounts);
+    private static final Scanner input = new Scanner(System.in);
+    private static final HashMap<Integer, Account> accounts = new HashMap<>();
 
-        // Welcome the user
+    public static void main(String[] args) {
+        String choice;
+
+        initializeBank(accounts);
         System.out.println("Welcome to London Central Bank, a small, credit union style bank in downtown London, ON.");
 
         while (true) {
-            // Prompt user for what they would like to do
             boolean validChoice;
 
-            // Ensure the user's choice is valid
             do {
                 System.out.println("[C]reate account, [S]how account details, [D]eposits, [W]ithdraw, [Q]uit?");
                 System.out.print("Choice: ");
                 choice = input.nextLine().trim().toUpperCase();
-                System.out.println();
 
                 validChoice = choice.equals("C") || choice.equals("S") || choice.equals("D") ||
                         choice.equals("W") || choice.equals("Q");
@@ -34,200 +29,153 @@ public class Main {
 
             } while (!validChoice);
 
-            // Decide what to do based on choice
             switch (choice) {
-                // If the user wants to QUIT
-                case "Q": System.exit(0);
+                case "Q":
+                    input.close();
+                    System.out.println("Thanks for banking with us. We hope to see you again soon.");
+                    System.exit(0);
+                    break;
 
-                case "C": // If the user wants to CREATE an account
-                    while (true) {
-                        // Create variables to store info. for the new account
-                        String name;
-                        Double balance, interestOrOverdraft;
+                case "C":
+                    String name;
+                    double balance = 0;
 
-                        // Prompt user for the kind of account, name, and balance and store the values
+                    do {
                         System.out.print("Type of Account ([S]avings or [C]hecking): ");
                         choice = input.nextLine().trim().toUpperCase();
-                        
-                        // Make sure the user's input is valid before continuing
-                        if (!(choice.equals("S") || choice.equals("C"))) {
-                            System.out.println("No no no, the only options were S and C!");
-                            continue;
-                        }
-                        System.out.println("When inputing a name, make sure everything is capitalized correctly.");
-                        System.out.println("Our systems are case sensitive. Input first name followed by a space, then last name.");
-                        System.out.print("Name: ");
-                        name = input.nextLine().trim(); // What this doesn't deal with is extra spaces between the names
 
-                        // If the name is invalid, inform the user
-                        if ((name.split(" ")).length == 1) {
-                            System.out.println("So you're telling me you go by " + name + "?");
-                            System.out.println("Like, hey " + name + "!");
-                            System.out.println("Try again.");
-                            System.out.println();
-                            continue;
-                        }
+                        validChoice = choice.equals("S") || choice.equals("C");
+
+                        if (!validChoice)
+                            System.out.println("Invalid choice. Please try again.");
+
+                    } while (!validChoice);
+
+                    do {
+                        System.out.print("Account Holder Name (First Last): ");
+                        name = input.nextLine().trim();
+
+                        validChoice = !name.isEmpty();
+
+                        if (!validChoice)
+                            System.out.println("Invalid name. Please try again.");
+
+                    } while (!validChoice);
+
+
+                    do {
+                        validChoice = false;
                         System.out.print("Balance: ");
-                        balance = toDouble(input.nextLine());
-                        if (balance == null) {
-                            System.out.println("Well, that's not a number. What do you want me to do? Try again.");
-                            System.out.println();
-                            continue;
+
+                        try {
+                            balance = input.nextDouble();
+                            validChoice = true;
+                        } catch (InputMismatchException e) {
+                            System.out.println("Invalid balance. Please try again.");
+                            input.nextLine();
                         }
+                    } while (!validChoice);
 
-                        // Based on their choice, ask them the specific questions and create the corresponding account
-                        if (choice.equals("S")) { // savings
-                            System.out.print("Interest Rate: ");
-                            interestOrOverdraft = toDouble(input.nextLine().trim());
-                            if (interestOrOverdraft == null) {
-                                System.out.println("Should I choose the rate for you? I'm thinking negative will work.");
-                                System.out.println("Kidding. Try again.");
-                                System.out.println();
-                                continue;
+
+                    if (choice.equals("S")) {
+
+                        double intrestRate = 0;
+
+                        do {
+                            System.out.print("Interest Rate (%): ");
+
+                            try {
+                                intrestRate = input.nextDouble();
+                                validChoice = intrestRate >= 0;
+                            } catch (InputMismatchException e) {
+                                System.out.println("Invalid interest rate. Please try again.");
+                                input.nextLine();
                             }
-                            // Create account
-                            createSavingsAccount(accounts, name, balance, interestOrOverdraft);
 
-                        } else if (choice.equals("C")) { // checking
+                            if (!validChoice)
+                                System.out.println("Invalid interest rate. Please try again.");
+
+                        } while (!validChoice);
+
+                        createSavingsAccount(name, balance, intrestRate);
+
+                    } else {
+
+                        double overdraft = 0;
+
+                        do {
                             System.out.print("Overdraft Limit: ");
-                            interestOrOverdraft = toDouble(input.nextLine());
-                            if (interestOrOverdraft == null) {
-                                System.out.println("Ummm...try again.");
-                                continue;
+
+                            try {
+                                overdraft = input.nextDouble();
+                                validChoice = overdraft >= 0;
+                            } catch (InputMismatchException e) {
+                                System.out.println("Invalid overdraft limit. Please try again.");
+                                input.nextLine();
                             }
-                            // Create account
-                            createCheckingAccount(accounts, name, balance, interestOrOverdraft);
-                        }
 
-                        // Let user know the account has been created
-                        System.out.println("Account Created.");
-                    }
+                            if (!validChoice)
+                                System.out.println("Invalid overdraft limit. Please try again.");
+                        } while (!validChoice);
 
-                case "S": // If the user wants account details to be shown
-                    String nameOrNumber;
-                    int accountNumber;
-                    System.out.print("Account number or name (First then Last): ");
-                    nameOrNumber = input.nextLine().trim();
-                    System.out.println();
-                    try {
-                        // See if the input was a number
-                        accountNumber = Integer.valueOf(nameOrNumber);
-                        // Use account number to find account and display info
-                        System.out.println((accounts.get(accountNumber)).toString());
-                        System.out.println();
-                    } catch (Exception e) { // treat the input like a name
-                        ArrayList<Account> showAccounts = findAccounts(accounts, nameOrNumber);
-                        System.out.println("There are " + showAccounts.size() + " account(s) with the name " + nameOrNumber);
-                        System.out.println();
-
-                        // Display all the account info
-                        for (Account acc: showAccounts) {
-                            System.out.println(acc.toString());
-                            System.out.println();
-                        }
+                        createCheckingAccount(name, balance, overdraft);
                     }
                     break;
 
-                case "D": // If the user wants to make a deposit
-                    String nameOrNumber2;
-                    int accountNumber2;
-                    Double deposit;
-                    System.out.println("Account number or name (First then Last): ");
-                    nameOrNumber2 = input.nextLine().trim();
-                    // Prompt user for a valid double deposit
-                    while (true) {
-                        System.out.print("Deposit: ");
-                        deposit = toDouble(input.nextLine());
-                        if (deposit != null) break;
-                        System.out.println("Try again.");
-                    }
+                case "S":
+                    System.out.println(getAccount());
+                    break;
 
-                    try {
-                        // See if the input was a number
-                        accountNumber2 = Integer.valueOf(nameOrNumber2);
-                        // Use account number to find account and deposit
-                        (accounts.get(accountNumber2)).deposit(deposit);
-                        break;
-                    } catch (Exception e) { // treat the input like a name
-                        ArrayList<Account> showAccounts = findAccounts(accounts, nameOrNumber2);
-                        System.out.println("There are " + showAccounts.size() + " with the name " + nameOrNumber2);
+                case "D":
+                    double deposit = 0;
 
-                        // If there are no accounts matching the name, the program shouldn't continue
-                        if (showAccounts.size() == 0) {
-                            System.out.println("Cancelling...");
-                            break;
-                        }
-                        // Display all the account info so the user can choose an account
-                        for (Account acc: showAccounts) {
-                            acc.toString();
-                            System.out.println();
-                        }
+                    System.out.println("What account would you like to use? ");
+                    Account depositAccount = getAccount();
 
-                        // Prompt the user for the account number
-                        System.out.println("Please input the account number of the account you would like to make a deposit in.");
-                        while (true) {
-                            try {
-                                System.out.println("Account Number: ");
-                                accountNumber2 = input.nextInt();
-                                (accounts.get(accountNumber2)).deposit(deposit);
-                                break;
-                            } catch (Exception k) {
-                                System.out.println("That is not one of the accounts listed.");
-                            }
-                        }
-                        break;
-                    }
-                case "W": // If the user wants to make a withdrawal
-                String nameOrNumber3;
-                    int accountNumber3;
-                    Double withdraw;
-                    System.out.println("Account number or name (First then Last): ");
-                    nameOrNumber3 = input.nextLine().trim();
-                    // Prompt user for a valid double deposit
-                    while (true) {
-                        System.out.print("Deposit: ");
-                        withdraw = toDouble(input.nextLine());
-                        if (withdraw != null) break;
-                        System.out.println("Try again.");
-                    }
+                    do {
+                        System.out.print("How much would you like to deposit: ");
 
-                    try {
-                        // See if the input was a number
-                        accountNumber3 = Integer.valueOf(nameOrNumber3);
-                        // Use account number to find account and deposit
-                        (accounts.get(accountNumber3)).withdraw(withdraw);
-                        break;
-                    } catch (Exception e) { // treat the input like a name
-                        ArrayList<Account> showAccounts = findAccounts(accounts, nameOrNumber3);
-                        System.out.println("There are " + showAccounts.size() + " with the name " + nameOrNumber3);
+                        try {
+                            deposit = input.nextDouble();
+                            if (deposit < 0)
+                                System.out.println("Deposit must be positive.");
+                            else
+                                validChoice = true;
+                        } catch (InputMismatchException e) {
+                            System.out.println("Invalid deposit. Please try again.");
+                            input.nextLine();
+                            validChoice = false;
+                        }
+                    } while (!validChoice);
 
-                        // If there are no accounts matching the name, the program shouldn't continue
-                        if (showAccounts.size() == 0) {
-                            System.out.println("Cancelling...");
-                            break;
-                        }
-                        // Display all the account info so the user can choose an account
-                        for (Account acc: showAccounts) {
-                            acc.toString();
-                            System.out.println();
-                        }
+                    depositAccount.deposit(deposit);
+                    System.out.println("Deposit successful. New balance: $" + String.format("%.2f", depositAccount.getBalance()));
+                    break;
 
-                        // Prompt the user for the account number
-                        System.out.println("Please input the account number of the account you would like to make a deposit in.");
-                        while (true) {
-                            try {
-                                System.out.println("Account Number: ");
-                                accountNumber3 = input.nextInt();
-                                (accounts.get(accountNumber3)).withdraw(withdraw);
-                                break;
-                            } catch (Exception k) {
-                                System.out.println("That is not one of the accounts listed.");
-                            }
+                case "W":
+                    double withdrawl = 0;
+
+                    System.out.print("What account would you like to use? ");
+                    Account withdrawlAccount = getAccount();
+
+                    do {
+                        System.out.print("How much would you like to withdraw: ");
+
+                        try {
+                            withdrawl = input.nextDouble();
+                            validChoice = withdrawlAccount.withdraw(withdrawl);
+                        } catch (InputMismatchException e) {
+                            System.out.println("Invalid number. Please try again.");
+                            input.nextLine();
+                            validChoice = false;
                         }
-                        break;
-                    }
-                default: System.out.println("Hmmm, why are you here?");
+                    } while (!validChoice);
+                    System.out.println("Withdrawal successful. New balance: $" + String.format("%.2f", withdrawlAccount.getBalance()));
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
             }
+            input.nextLine();
         }
     }
 
@@ -242,6 +190,7 @@ public class Main {
         // Put the accounts in hashmap
         holder = new Checking("Diego Martin", 668.57, 100.00);
         someAccounts.put(holder.getAccountNumber(), holder);
+        System.out.println(holder.getAccountNumber());
         holder = new Savings("Janice Watt", 120.00, 1.9);
         someAccounts.put(holder.getAccountNumber(), holder);
         holder = new Checking("Michael Rose", 37.65, 0.0);
@@ -250,49 +199,49 @@ public class Main {
     }
 
     /**
-     * Tries to convert a string to a double
-     * @param pleaseConvert The string value to be converted
-     * @return  The double or null if it can't be converted
-     */
-    public static Double toDouble(String pleaseConvert) {
-        Double myDouble;
-        try {
-            myDouble = Double.valueOf(pleaseConvert);
-            return myDouble;
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    /**
      * Creates a Savings account
      */
-    public static void createSavingsAccount(HashMap<Integer, Account> someAccounts, String name, double initial, double interest) {
+    public static void createSavingsAccount(String name, double initial, double interest) {
         Account holder;
         holder = new Savings(name, initial, interest);
-        someAccounts.put(holder.getAccountNumber(), holder);
+        accounts.put(holder.getAccountNumber(), holder);
+
+        System.out.println("Account Created! Account number: " + holder.getAccountNumber());
     }
 
     /**
      * Creates a Checking account
      */
-    public static void createCheckingAccount(HashMap<Integer, Account> someAccounts, String name, double initial, double overdraft) {
+    public static void createCheckingAccount(String name, double initial, double overdraft) {
         Account holder;
         holder = new Checking(name, initial, overdraft);
-        someAccounts.put(holder.getAccountNumber(), holder);
+        accounts.put(holder.getAccountNumber(), holder);
+
+        System.out.println("Account Created! Account number: " + holder.getAccountNumber());
     }
 
     /**
-     * Finds account using a name
+     * Gets an account from the user using an account number
+     * @return The account that was found
      */
-    public static ArrayList<Account> findAccounts(HashMap<Integer, Account> someAccounts, String name) {
-        ArrayList<Account> matchingAccounts = new ArrayList<Account>();
+    public static Account getAccount () {
+        Account account = null;
 
-        // Add all the accounts that have the name
-        for (Account acc: someAccounts.values()) {
-            if ((acc.getName()).equals(name)) matchingAccounts.add(acc);
-        }
+        do {
+            System.out.print("Account number: ");
 
-        return matchingAccounts;
+            try {
+                int accountNumber = input.nextInt();
+                account = accounts.get(accountNumber);
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid number. Please try again.");
+            }
+
+            if (account == null)
+                System.out.println("Account not found. Please try again.");
+
+        } while (account == null);
+
+        return account;
     }
 }

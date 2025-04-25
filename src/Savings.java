@@ -68,7 +68,7 @@ public class Savings extends Account{
      */
     @Override
     public String toString() {
-        return super.toString() + "\nInterest Rate: " + interestRate;
+        return super.toString() + "\nInterest Rate: " + interestRate + "%";
     }
 
     /**
@@ -76,7 +76,7 @@ public class Savings extends Account{
      * @return The updated balance including calculated interest.
      */
     private double calculateInterest() {
-        return getBalance() * (1+ Math.pow((interestRate/12),12));
+        return getBalance() * (1+ Math.pow(((interestRate/100)/12),12));
     }
 
     /**
