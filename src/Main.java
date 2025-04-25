@@ -29,21 +29,12 @@ public class Main {
         System.out.println("Welcome to London Central Bank, a small, credit union style bank in downtown London, ON.");
 
         while (true) {
-            boolean validChoice;
-
-            // Get user choice
-            do {
-                System.out.println("[C]reate account, [S]how account details, [D]eposits, [W]ithdraw, [R]emove Account, [Q]uit?");
-                System.out.print("Choice: ");
-                choice = input.nextLine().trim().toUpperCase();
-
-                validChoice = choice.equals("C") || choice.equals("S") || choice.equals("D") ||
-                        choice.equals("W") || choice.equals("Q") || choice.equals("R");
-
-                if (!validChoice)
-                    System.out.println("Invalid choice. Please try again.");
-
-            } while (!validChoice);
+            boolean validChoice = true;
+            System.out.println();
+            System.out.println("[C]reate account, [S]how account details, [D]eposits, [W]ithdraw, [R]emove Account, [Q]uit?");
+            System.out.print("Choice: ");
+            choice = input.nextLine().trim().toUpperCase();
+            System.out.println();
 
             switch (choice) {
                 case "Q": // quit
@@ -171,10 +162,7 @@ public class Main {
 
                     } while (account == null && accountNumber != 0);
                     
-                    if (accountNumber != 0)
-                        System.out.println(account);
-
-                    
+                    if (accountNumber != 0) System.out.println(account);
                     break;
 
                 case "D": // deposit
@@ -183,23 +171,23 @@ public class Main {
                     System.out.println("What account would you like to use? ");
                     Account depositAccount = getAccount();
 
-                    do {
+                    while (true) {
                         System.out.print("How much would you like to deposit: ");
 
                         try {
                             deposit = input.nextDouble();
-                            if (deposit < 0)
-                                System.out.println("Deposit must be positive.");
-                            else
-                                validChoice = true;
+                            // Check to make sure user is using WHOLE cents
+                            if (((String.valueOf(deposit)).replaceFirst(String.valueOf((int) Math.floor(deposit)), "")).length() > 2) {
+                                System.out.println("Deposit must not have decimal cents.");
+                                continue;
+                            }
+                            if (depositAccount.deposit(deposit)) break; // if deposit succeeds
                         } catch (InputMismatchException e) {
                             System.out.println("Invalid deposit. Please try again.");
                             input.nextLine();
-                            validChoice = false;
                         }
-                    } while (!validChoice);
+                    }
 
-                    depositAccount.deposit(deposit);
                     System.out.println("Deposit successful. New balance: $" +
                             String.format("%.2f", Math.floor(depositAccount.getBalance() * 100) / 100));
                     break;
@@ -220,18 +208,23 @@ public class Main {
                         break;
                     }
 
-                    do {
+                    while (true) {
                         System.out.print("How much would you like to withdraw: ");
 
                         try {
                             withdrawal = input.nextDouble();
-                            validChoice = withdrawalAccount.withdraw(withdrawal);
+                            // Check to make sure user is using WHOLE cents
+                            if (((String.valueOf(withdrawal)).replaceFirst(String.valueOf((int) Math.floor(withdrawal)), "")).length() > 2) {
+                                System.out.println("Withdrawal must not have decimal cents.");
+                                continue;
+                            }
+                            if (withdrawalAccount.withdraw(withdrawal)) break; // if withdrawal succeeds
                         } catch (InputMismatchException e) {
-                            System.out.println("Invalid number. Please try again.");
+                            System.out.println("Invalid withdrawal. Please try again.");
                             input.nextLine();
-                            validChoice = false;
                         }
-                    } while (!validChoice);
+                    }
+
                     System.out.println("Withdrawal successful. New balance: $" +
                             String.format("%.2f", Math.floor(withdrawalAccount.getBalance() * 100) / 100));
                     break;
@@ -264,9 +257,9 @@ public class Main {
                     break;
                 default:
                     System.out.println("Invalid choice. Please try again.");
+                    validChoice = false;
             }
-            if (!choice.equals("R"))
-                input.nextLine();
+            if (!choice.equals("R") && validChoice) input.nextLine();
         }
     }
 
