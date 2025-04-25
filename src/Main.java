@@ -9,6 +9,7 @@ import Accounts.Account;
 import Accounts.Checking;
 import Accounts.Savings;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -144,10 +145,12 @@ public class Main {
                     int accountNumber = 99999;
 
                     do {
-                        System.out.print("Account number: ");
+                        System.out.print("Account name or number: ");
 
                         try {
-                            accountNumber = input.nextInt();
+                            // Temporarily use choice variable to store input
+                            choice = input.nextLine().trim();
+                            accountNumber = Integer.valueOf(choice);
 
                             if (accountNumber == 0){
                                 for (Account a : accounts.values()) {
@@ -157,18 +160,22 @@ public class Main {
                             } else {
                                 account = accounts.get(accountNumber);
                             }
-                        } catch (InputMismatchException e) {
-                            System.out.print("Invalid number, ");
+                        } catch (NumberFormatException e) {
+                            // First check to see if the input was a name
+                            if (showAccounts(choice)) {
+                                accountNumber = 0; // So that print statement outside of loop doesn't happen
+                                break;
+                            }
                         }
 
                         if (account == null && accountNumber != 0) {
                             System.out.println("Account not found. Please try again.");
-                            input.nextLine();
                         }
 
                     } while (account == null && accountNumber != 0);
                     
-                    if (accountNumber != 0) System.out.println(account);
+                    if (accountNumber != 0) System.out.println("\n" + account);
+                    validChoice = false; // So that nextLine() doesn't occur at the end of the switch statement
                     break;
 
                 case "D": // deposit
@@ -266,6 +273,7 @@ public class Main {
                     validChoice = false;
             }
             if (!choice.equals("R") && validChoice) input.nextLine();
+            
         }
     }
 
@@ -346,5 +354,31 @@ public class Main {
         if (((String.valueOf(money)).replaceFirst(String.valueOf((int) Math.floor(money)), "")).length() > 3) {
             return true;
         } else return false;
+    }
+
+    /**
+     * Shows accounts using a name
+     * @param name  The name to search for
+     * @return  Whether accounts were found or not
+     */
+    public static Boolean showAccounts(String name) {
+        ArrayList<Account> matchingAccounts = new ArrayList<Account>(); // Arraylist to store the accounts
+
+        // Add all the accounts that have the name
+        for (Account acc: accounts.values()) {
+            if ((acc.getName()).equals(name)) matchingAccounts.add(acc);
+        }
+
+        // Do not continue if no accounts were found
+        if (matchingAccounts.size() == 0) return false;
+
+        System.out.println("There are " + matchingAccounts.size() + " account(s) with the name " + name);
+
+        // Display all the account info
+        for (Account acc: matchingAccounts) {
+            System.out.println();
+            System.out.println(acc.toString().replaceFirst(String.valueOf(acc.getAccountNumber()), String.valueOf((int) Math.floor(acc.getAccountNumber()/1000)) + "***"));
+        }
+        return true;
     }
 }
