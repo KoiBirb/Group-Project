@@ -36,7 +36,7 @@ public class Checking extends Account {
      */
     @Override
     public boolean withdraw(double amount) {
-        if (amount <= 0) {
+        if (amount < 0) {
             System.out.println("Withdrawal amount must be positive.");
             return false;
         } else if (amount <= balance + overdraftLimit) {

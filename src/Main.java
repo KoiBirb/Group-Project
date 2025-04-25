@@ -33,7 +33,7 @@ public class Main {
 
             // Get user choice
             do {
-                System.out.println("[C]reate account, [S]how account details, [D]eposits, [W]ithdraw, [Q]uit?");
+                System.out.println("[C]reate account, [S]how account details, [D]eposits, [W]ithdraw, [R]emove Account, [Q]uit?");
                 System.out.print("Choice: ");
                 choice = input.nextLine().trim().toUpperCase();
 
@@ -168,28 +168,65 @@ public class Main {
                     } while (!validChoice);
 
                     depositAccount.deposit(deposit);
-                    System.out.println("Deposit successful. New balance: $" + String.format("%.2f", depositAccount.getBalance()));
+                    System.out.println("Deposit successful. New balance: $" +
+                            String.format("%.2f", Math.floor(depositAccount.getBalance() * 100) / 100));
                     break;
 
                 case "W": // withdrawal
                     double withdrawal;
 
+                    if (accounts.isEmpty()) {
+                        System.out.println("No accounts available for withdrawal.");
+                        break;
+                    }
+
                     System.out.print("What account would you like to use? ");
-                    Account withdrawlAccount = getAccount();
+                    Account withdrawalAccount = getAccount();
+
+                    if (withdrawalAccount.getBalance() == 0) {
+                        System.out.println("Account has no balance. Cannot withdraw.");
+                        break;
+                    }
 
                     do {
                         System.out.print("How much would you like to withdraw: ");
 
                         try {
                             withdrawal = input.nextDouble();
-                            validChoice = withdrawlAccount.withdraw(withdrawal);
+                            validChoice = withdrawalAccount.withdraw(withdrawal);
                         } catch (InputMismatchException e) {
                             System.out.println("Invalid number. Please try again.");
                             input.nextLine();
                             validChoice = false;
                         }
                     } while (!validChoice);
-                    System.out.println("Withdrawal successful. New balance: $" + String.format("%.2f", withdrawlAccount.getBalance()));
+                    System.out.println("Withdrawal successful. New balance: $" +
+                            String.format("%.2f", Math.floor(withdrawalAccount.getBalance() * 100) / 100));
+                    break;
+                case "R": // remove account
+
+                    System.out.println("What account would you like to remove? ");
+                    Account removeAccount = getAccount();
+
+                    if (removeAccount != null) {
+
+                        System.out.println("Are you sure you want to remove this account? (Y/N)");
+
+                        String confirmation = input.nextLine().trim().toUpperCase();
+
+                        if (!confirmation.equals("Y")) {
+                            System.out.println("Account removal cancelled.");
+                            break;
+                        }
+
+                        System.out.println("Removing account: " + removeAccount.getAccountNumber() + " withdrew $" + removeAccount.getBalance());
+                        removeAccount.withdraw(removeAccount.getBalance());
+
+                        accounts.remove(removeAccount.getAccountNumber());
+                        System.out.println("Account removed successfully.");
+                    } else {
+                        System.out.println("Account not found.");
+                    }
                     break;
                 default:
                     System.out.println("Invalid choice. Please try again.");

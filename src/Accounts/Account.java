@@ -45,10 +45,10 @@ public abstract class Account {
      * Method to print out account information.
      */
     public String toString() {
-       return   "Accounts.Account Holder: " + name + "\n" +
-                "Accounts.Account Number: " + accountNumber + "\n" +
-                "Accounts.Account Type: " + this.getClass().getSimpleName() + "\n" +
-                "Accounts.Account Balance: $" + String.format("%.2f", balance);
+       return   "Account Holder: " + name + "\n" +
+                "Account Number: " + accountNumber + "\n" +
+                "Account Type: " + this.getClass().getSimpleName() + "\n" +
+                "Account Balance: $" + String.format("%.2f", Math.floor(balance * 100) / 100);
     }
 
     /**
