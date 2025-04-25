@@ -1,5 +1,5 @@
 /*
- * Accounts.Savings.java
+ * Main.java
  * Eleora Jacob
  * April 25, 2025,
  * Driver class for the bank program.
@@ -85,11 +85,14 @@ public class Main {
 
                         try {
                             balance = input.nextDouble();
-                            validChoice = true;
+                            validChoice = balance > 0;
                         } catch (InputMismatchException e) {
-                            System.out.println("Invalid balance. Please try again.");
                             input.nextLine();
                         }
+
+                        if (!validChoice)
+                            System.out.println("Invalid balance. Please try again.");
+
                     } while (!validChoice);
 
 
@@ -104,7 +107,7 @@ public class Main {
                                 interestRate = input.nextDouble();
                                 validChoice = interestRate >= 0;
                             } catch (InputMismatchException e) {
-                                System.out.println("Invalid interest rate. Please try again.");
+                                validChoice = false;
                                 input.nextLine();
                             }
 
@@ -209,9 +212,11 @@ public class Main {
         System.out.println(holder.getAccountNumber());
         holder = new Savings("Janice Watt", 120.00, 1.9);
         someAccounts.put(holder.getAccountNumber(), holder);
+        System.out.println(holder.getAccountNumber());
         holder = new Checking("Michael Rose", 37.65, 0.0);
         someAccounts.put(holder.getAccountNumber(), holder);
-        
+        System.out.println(holder.getAccountNumber());
+
     }
 
     /**
