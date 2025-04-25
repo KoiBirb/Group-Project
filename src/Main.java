@@ -280,13 +280,10 @@ public class Main {
         // Put the accounts in hashmap
         holder = new Checking("Diego Martin", 668.57, 100.00);
         someAccounts.put(holder.getAccountNumber(), holder);
-        System.out.println(holder.getAccountNumber());
         holder = new Savings("Janice Watt", 120.00, 1.9);
         someAccounts.put(holder.getAccountNumber(), holder);
-        System.out.println(holder.getAccountNumber());
         holder = new Checking("Michael Rose", 37.65, 0.0);
         someAccounts.put(holder.getAccountNumber(), holder);
-        System.out.println(holder.getAccountNumber());
 
     }
 
